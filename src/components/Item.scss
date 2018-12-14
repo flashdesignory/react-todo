@@ -1,0 +1,21 @@
+.todo-list-item{
+  display:flex;
+  margin: 2px 0;
+  position: relative;
+  &.selected{
+    .item-text{
+      color:red;
+    }
+  }
+  .item-text{
+    height:25px;
+    margin: 0 2px;
+    display: inline-block;
+    line-height: 25px;
+    flex:1;
+    color:#ecf0f1;
+    background:#34495e;
+    font-size: inherit;
+    padding:0 4px;
+  }
+}
