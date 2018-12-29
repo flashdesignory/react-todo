@@ -90,6 +90,22 @@ class App extends Component {
     });
   }
 
+  handleUpdateItem = (value) => {
+    console.log('handleUpdateItem', value);
+    const { data } = this.state;
+
+    updateItem(storageId, value);
+    const updatedData = data.map((item) => {
+      if (item.id === value.id) {
+        return value;
+      }
+      return item;
+    });
+    this.setState({
+      data: updatedData,
+    });
+  }
+
   handleAddItem = (value) => {
     const { data, searchTerm } = this.state;
     const item = {};
@@ -148,6 +164,7 @@ class App extends Component {
             filterTerm={filter}
             handleItemStatus={this.handleItemStatus}
             handleRemoveItem={this.handleRemoveItem}
+            handleUpdateItem={this.handleUpdateItem}
           />
         </div>
       </div>

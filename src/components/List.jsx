@@ -8,6 +8,7 @@ type Props = {
   filterTerm: string,
   handleItemStatus: (e) => {},
   handleRemoveItem: (e) => {},
+  handleUpdateItem: (e) => {},
 }
 
 class List extends Component<Props> { //eslint-disable-line
@@ -35,9 +36,14 @@ class List extends Component<Props> { //eslint-disable-line
     handleItemStatus(e.target.id);
   }
 
-  handleOnClick = (e) => {
+  handleOnRemove = (e) => {
     const { handleRemoveItem } = this.props;
     handleRemoveItem(e.target.name);
+  }
+
+  handleOnUpdate = (item) => {
+    const { handleUpdateItem } = this.props;
+    handleUpdateItem(item);
   }
 
   render() {
@@ -48,7 +54,8 @@ class List extends Component<Props> { //eslint-disable-line
             <Item
               key={item.id}
               onChange={this.handleOnChange}
-              onClick={this.handleOnClick}
+              onRemove={this.handleOnRemove}
+              onUpdate={this.handleOnUpdate}
               item={item}
             />
           ))}
