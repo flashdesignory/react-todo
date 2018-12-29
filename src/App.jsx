@@ -5,6 +5,9 @@ import List from './components/List';
 import AddItem from './components/AddItem';
 import Search from './components/Search';
 import Filter from './components/Filter';
+import {
+  getItem, addItem, removeItem, updateItem,
+} from './api/api';
 import './App.scss';
 
 const defaultData = [
@@ -16,17 +19,40 @@ const defaultData = [
   },
 ];
 
+const storageId = 'todo-app';
+
 class App extends Component {
   state = {
-    data: defaultData,
+    data: [],
     searchTerm: '',
     filter: '',
   }
 
+  componentDidMount() {
+    const savedData = getItem(storageId);
+    if (!savedData) {
+      addItem(storageId, defaultData);
+      this.setState({
+        data: defaultData,
+      });
+    } else {
+      this.setState({
+        data: savedData,
+      });
+    }
+  }
+
   handleItemStatus = (id) => {
     const { data } = this.state;
-    const updatedData = data.map(item => (item.id === id
-      ? { ...item, completed: !item.completed } : item));
+    const updatedData = data.map((item) => {
+      if (item.id === id) {
+        const updatedItem = { ...item, completed: !item.completed };
+        updateItem(storageId, updatedItem);
+        return updatedItem;
+      }
+      return item;
+    });
+
     this.setState({
       data: updatedData,
     });
@@ -56,6 +82,8 @@ class App extends Component {
 
   handleRemoveItem = (id) => {
     const { data } = this.state;
+
+    removeItem(storageId, id);
     const updatedData = data.filter(item => item.id !== id);
     this.setState({
       data: updatedData,
@@ -77,6 +105,7 @@ class App extends Component {
       item.selected = false;
     }
 
+    addItem(storageId, item);
     const updatedData = [item, ...data];
     this.setState({
       data: updatedData,
