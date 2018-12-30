@@ -35,7 +35,7 @@ class Item extends Component<Props, State> { //eslint-disable-line
     console.log(e.target.value); // eslint-disable-line
   }
 
-  handleOnClick = (e) => {
+  handleOnClick = () => {
     const { value } = this.state;
     const { onUpdate } = this.props;
     const text = value;
@@ -64,7 +64,14 @@ class Item extends Component<Props, State> { //eslint-disable-line
           onChange={this.handleOnChange}
           onFocus={this.handleOnBlur}
         />
-        <button name={item.id} type="button" onClick={this.handleOnClick}>save</button>
+        <button
+          name={item.id}
+          type="button"
+          onClick={this.handleOnClick}
+          disabled={value === item.action}
+        >
+          save
+        </button>
         <button name={item.id} type="button" onClick={onRemove}>delete</button>
       </li>
     );

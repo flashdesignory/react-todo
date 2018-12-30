@@ -104,4 +104,8 @@ button{
   &:hover {
     background-color:#344956;
   }
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }

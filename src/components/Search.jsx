@@ -54,7 +54,7 @@ class Search extends Component<Props, State> {
             onChange={this.handleOnChange}
             onFocus={this.handleOnFocus}
           />
-          <button type="submit">clear</button>
+          <button type="submit" disabled={value === defaultValue || value === ''}>clear</button>
         </form>
       </div>
     );

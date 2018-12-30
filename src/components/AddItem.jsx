@@ -53,7 +53,7 @@ class AddItem extends Component<Props, State> {
             onChange={this.handleOnChange}
             onFocus={this.handleOnFocus}
           />
-          <button type="submit">add</button>
+          <button type="submit" disabled={value === defaultValue || value === ''}>add</button>
         </form>
       </div>
     );
