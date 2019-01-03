@@ -1,5 +1,7 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { toggleItem, removeItem, updateItem } from '../state/actions';
 import './Item.scss';
 
 type Props = {
@@ -35,7 +37,7 @@ class Item extends Component<Props, State> { //eslint-disable-line
     console.log(e.target.value); // eslint-disable-line
   }
 
-  handleOnClick = () => {
+  dispatchSave = () => {
     const { value } = this.state;
     const { onUpdate } = this.props;
     const text = value;
@@ -44,17 +46,27 @@ class Item extends Component<Props, State> { //eslint-disable-line
     onUpdate(updatedItem);
   }
 
+  dispatchChange = () => {
+    const { onChange } = this.props;
+    const { item } = this.props;
+    onChange(item.id);
+  }
+
+  dispatchDelete = () => {
+    const { onRemove } = this.props;
+    const { item } = this.props;
+    onRemove(item.id);
+  }
+
   render() {
-    const {
-      item, onChange, onRemove,
-    } = this.props;
+    const { item } = this.props;
     const { value } = this.state;
     return (
       <li className={item.selected ? 'todo-list-item selected' : 'todo-list-item'}>
         <input
           type="checkbox"
           checked={item.completed}
-          onChange={onChange}
+          onChange={this.dispatchChange}
           id={item.id}
         />
         <label htmlFor={item.id} />
@@ -67,15 +79,23 @@ class Item extends Component<Props, State> { //eslint-disable-line
         <button
           name={item.id}
           type="button"
-          onClick={this.handleOnClick}
+          onClick={this.dispatchSave}
           disabled={value === item.action}
         >
           save
         </button>
-        <button name={item.id} type="button" onClick={onRemove}>delete</button>
+        <button name={item.id} type="button" onClick={this.dispatchDelete}>delete</button>
       </li>
     );
   }
 }
 
-export default Item;
+const mapStateToProps = state => ({ data: state.data });
+
+const mapDispatchToProps = dispatch => ({
+  onUpdate: value => dispatch(updateItem(value)),
+  onChange: value => dispatch(toggleItem(value)),
+  onRemove: value => dispatch(removeItem(value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Item);

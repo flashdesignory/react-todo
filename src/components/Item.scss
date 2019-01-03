@@ -3,7 +3,7 @@
   margin: 2px 0;
   position: relative;
   &.selected{
-    .item-text{
+    input{
       color:red;
     }
   }

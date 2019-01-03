@@ -1,9 +1,11 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { searchItems } from '../state/actions';
 import './Search.scss';
 
 type Props = {
-  handleFilterItem: () => {},
+  onSearch: () => {},
 }
 
 type State = {
@@ -18,11 +20,11 @@ class Search extends Component<Props, State> {
   }
 
   handleOnChange = (e) => {
-    const { handleFilterItem } = this.props;
+    const { onSearch } = this.props;
     this.setState({
       value: e.target.value,
     });
-    handleFilterItem(e.target.value);
+    onSearch(e.target.value);
   }
 
   handleOnFocus = (e) => {
@@ -34,11 +36,11 @@ class Search extends Component<Props, State> {
   }
 
   handleOnSubmit = (e) => {
-    const { handleFilterItem } = this.props;
+    const { onSearch } = this.props;
     this.setState({
       value: defaultValue,
     });
-    handleFilterItem('');
+    onSearch('');
     e.preventDefault();
   }
 
@@ -61,4 +63,11 @@ class Search extends Component<Props, State> {
   }
 }
 
-export default Search;
+// const mapStateToProps = state => ({ search: state.search });
+// const mapStateToProps = state => state;
+
+const mapDispatchToProps = dispatch => ({
+  onSearch: value => dispatch(searchItems(value)),
+});
+
+export default connect(null, mapDispatchToProps)(Search);

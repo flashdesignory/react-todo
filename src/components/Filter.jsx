@@ -1,21 +1,43 @@
 // @flow
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { filterItems } from '../state/actions';
 
 type Props = {
-  filterAll: () => {},
-  filterCompleted: () => {},
-  filterActive: () => {},
+  onFilter: () => {}
 }
 
-const Filter = (props: Props) => {
-  const { filterAll, filterCompleted, filterActive } = props;
-  return (
-    <div className="todo-filter-container">
-      <button type="button" onClick={filterAll}>all</button>
-      <button type="button" onClick={filterCompleted}>completed</button>
-      <button type="button" onClick={filterActive}>active</button>
-    </div>
-  );
-};
+class Filter extends Component<Props> {
+  filterAll = () => {
+    const { onFilter } = this.props;
+    onFilter('all');
+  }
 
-export default Filter;
+  filterActive = () => {
+    const { onFilter } = this.props;
+    onFilter('active');
+  }
+
+  filterCompleted = () => {
+    const { onFilter } = this.props;
+    onFilter('completed');
+  }
+
+  render() {
+    return (
+      <div className="todo-filter-container">
+        <button type="button" onClick={this.filterAll}>all</button>
+        <button type="button" onClick={this.filterCompleted}>completed</button>
+        <button type="button" onClick={this.filterActive}>active</button>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => ({ filter: state.filter });
+
+const mapDispatchToProps = dispatch => ({
+  onFilter: value => dispatch(filterItems(value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

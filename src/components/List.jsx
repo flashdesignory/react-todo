@@ -1,22 +1,21 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Item from './Item';
 import './List.scss';
 
 type Props = {
   data: object,
-  filterTerm: string,
-  handleItemStatus: (e) => {},
-  handleRemoveItem: (e) => {},
-  handleUpdateItem: (e) => {},
+  filter: string,
+  search: string,
 }
 
 class List extends Component<Props> { //eslint-disable-line
   getCurrentItems() {
-    const { data, filterTerm } = this.props;
+    const { data, filter, search } = this.props;
 
     const currentData = data.filter((item) => {
-      switch (filterTerm) {
+      switch (filter) {
         case '':
         case 'all':
           return item;
@@ -27,23 +26,16 @@ class List extends Component<Props> { //eslint-disable-line
         default:
           return item;
       }
+    }).map((item) => {
+      if (search === '') {
+        return { ...item, selected: false };
+      }
+      if (item.action.toLowerCase().includes(search.toLowerCase())) {
+        return { ...item, selected: true };
+      }
+      return { ...item, selected: false };
     });
     return currentData;
-  }
-
-  handleOnChange = (e) => {
-    const { handleItemStatus } = this.props;
-    handleItemStatus(e.target.id);
-  }
-
-  handleOnRemove = (e) => {
-    const { handleRemoveItem } = this.props;
-    handleRemoveItem(e.target.name);
-  }
-
-  handleOnUpdate = (item) => {
-    const { handleUpdateItem } = this.props;
-    handleUpdateItem(item);
   }
 
   render() {
@@ -53,9 +45,6 @@ class List extends Component<Props> { //eslint-disable-line
           {this.getCurrentItems().map(item => (
             <Item
               key={item.id}
-              onChange={this.handleOnChange}
-              onRemove={this.handleOnRemove}
-              onUpdate={this.handleOnUpdate}
               item={item}
             />
           ))}
@@ -65,4 +54,5 @@ class List extends Component<Props> { //eslint-disable-line
   }
 }
 
-export default List;
+const mapStateToProps = state => state;
+export default connect(mapStateToProps)(List);

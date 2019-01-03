@@ -1,9 +1,11 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addItem } from '../state/actions';
 import './AddItem.scss';
 
 type Props = {
-  handleAddItem: () => {},
+  onAdd: () => {},
 }
 
 type State = {
@@ -32,9 +34,9 @@ class AddItem extends Component<Props, State> {
   }
 
   handleOnSubmit = (e) => {
-    const { handleAddItem } = this.props;
     const { value } = this.state;
-    handleAddItem(value);
+    const { onAdd } = this.props;
+    onAdd(value);
     this.setState({
       value: defaultValue,
     });
@@ -60,4 +62,10 @@ class AddItem extends Component<Props, State> {
   }
 }
 
-export default AddItem;
+const mapStateToProps = state => ({ data: state.data });
+
+const mapDispatchToProps = dispatch => ({
+  onAdd: value => dispatch(addItem(value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddItem);
